@@ -9,7 +9,9 @@ const PORT = process.env.PORT || 3001;
 app.use(morgan("tiny"));
 app.use(express.json());
 
-app.get("/api/v1/restaurants", (req, res) => {
+app.get("/api/v1/restaurants", async (req, res) => {
+  const results = await db.query("SELECT * FROM restaurants");
+  console.log(results);
   res.status(200).json({
     status: "success",
     data: {
