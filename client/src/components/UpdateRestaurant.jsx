@@ -1,14 +1,11 @@
 import React from "react";
-import { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import RestaurantFinder from "../apis/RestaurantFinder";
-import { RestaurantsContext } from "../context/Restourants.context";
 
 const UpdateRestaurant = () => {
   const { id } = useParams();
-  const { restaurants } = useContext(RestaurantsContext);
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [priceRange, setPriceRange] = useState();
@@ -26,12 +23,11 @@ const UpdateRestaurant = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedRestaurant = await RestaurantFinder.put(`/${id}`, {
+    await RestaurantFinder.put(`/${id}`, {
       name,
       location,
       price_range: priceRange,
     });
-    console.log(updatedRestaurant);
     navigate("/");
   };
 
