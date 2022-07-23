@@ -54,9 +54,10 @@ const createRestaurant = async (req, res) => {
 const updateRestaurant = async (req, res) => {
   try {
     const { name, location, price_range } = req.body;
+    const { id } = req.params;
     const result = await db.query(
-      "INSERT INTO restaurants (name,location,price_range) VALUES ($1,$2,$3) RETURNING *", // if not write returning here, it wouldn't return any data.
-      [name, location, price_range]
+      "UPDATE restaurants SET name = $1, location = $2, price_range = $3 where id = $4 RETURNING *", // if not write returning here, it wouldn't return any data.
+      [name, location, price_range, id]
     );
     res.status(StatusCodes.CREATED).json({
       data: {
