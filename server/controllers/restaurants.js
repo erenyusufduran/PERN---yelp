@@ -57,6 +57,25 @@ const createRestaurant = async (req, res) => {
   }
 };
 
+const addReview = async (req, res) => {
+  const { id } = req.params;
+  const { name, review, rating } = req.body;
+  try {
+    const newReview = await db.query(
+      "INSERT INTO reviews (restaurant_id, name, review, rating) VALUES ($1,$2,$3,$4)",
+      [id, name, review, rating]
+    );
+    res.status(StatusCodes.CREATED).json({
+      status: "success",
+      data: {
+        review: newReview.rows[0],
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const updateRestaurant = async (req, res) => {
   try {
     const { name, location, price_range } = req.body;
@@ -90,4 +109,5 @@ module.exports = {
   createRestaurant,
   updateRestaurant,
   deleteRestaurant,
+  addReview,
 };
