@@ -62,7 +62,7 @@ const addReview = async (req, res) => {
   const { name, review, rating } = req.body;
   try {
     const newReview = await db.query(
-      "INSERT INTO reviews (restaurant_id, name, review, rating) VALUES ($1,$2,$3,$4)",
+      "INSERT INTO reviews (restaurant_id, name, review, rating) VALUES ($1,$2,$3,$4) RETURNING *",
       [id, name, review, rating]
     );
     res.status(StatusCodes.CREATED).json({

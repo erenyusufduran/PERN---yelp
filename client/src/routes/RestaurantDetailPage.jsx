@@ -17,7 +17,6 @@ const RestaurantDetailPage = () => {
       try {
         const response = await RestaurantFinder.get(`/${id}`);
         setSelectedRestaurant(response.data.data);
-        console.log(response);
       } catch (err) {
         console.log(err);
       }

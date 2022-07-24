@@ -1,13 +1,33 @@
 import React from "react";
 import { useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import RestaurantFinder from "../apis/RestaurantFinder";
 
 const AddReview = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [name, setName] = useState();
   const [rating, setRating] = useState("Rating");
   const [reviewText, setReviewText] = useState();
+
+  const handleSubmitReview = async (e) => {
+    try {
+      await RestaurantFinder.post(`/${id}/addReview`, {
+        name,
+        review: reviewText,
+        rating,
+      });
+    } catch (err) {
+      e.preventDefault();
+      console.log(err);
+    }
+  };
+
   return (
     <div className="mb-2">
-      <form>
+      <form onSubmit={handleSubmitReview}>
         <div className="form-row">
           <div className="form-group col-8">
             <label htmlFor="name">Name</label>
@@ -46,7 +66,9 @@ const AddReview = () => {
             className="form-control"
           ></textarea>
         </div>
-        <button className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
       </form>
     </div>
   );
