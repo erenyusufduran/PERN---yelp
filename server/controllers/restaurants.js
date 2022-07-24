@@ -3,12 +3,16 @@ const { StatusCodes } = require("http-status-codes");
 
 const getAllRestaurants = async (req, res) => {
   try {
-    const results = await db.query("SELECT * FROM restaurants");
+    // const results = await db.query("SELECT * FROM restaurants");
+    const restaurantRatingsData = await db.query(
+      "SELECT * FROM restaurants LEFT JOIN (SELECT restaurant_id, COUNT(*), TRUNC(AVG(rating), 1) as average_rating FROM reviews GROUP BY restaurant_id) reviews on restaurants.id = reviews.restaurant_id"
+    );
+
     res.status(StatusCodes.OK).json({
       status: "success",
-      results: results.rows.length,
+      results: restaurantRatingsData.rows.length,
       data: {
-        restaurants: results.rows,
+        restaurants: restaurantRatingsData.rows,
       },
     });
   } catch (error) {
@@ -17,9 +21,10 @@ const getAllRestaurants = async (req, res) => {
 };
 
 const getRestaurant = async (req, res) => {
+
   try {
     const restaurant = await db.query(
-      "SELECT * FROM restaurants WHERE id = $1", // string concatenating is not recommended.
+      "SELECT * FROM restaurants LEFT JOIN (SELECT restaurant_id, COUNT(*), TRUNC(AVG(rating), 1) as average_rating FROM reviews GROUP BY restaurant_id) reviews on restaurants.id = reviews.restaurant_id WHERE id = $1",
       [req.params.id]
     );
 

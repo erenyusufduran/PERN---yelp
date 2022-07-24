@@ -5,8 +5,6 @@ import RestaurantFinder from "../apis/RestaurantFinder";
 
 const AddReview = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const [name, setName] = useState();
   const [rating, setRating] = useState("Rating");
