@@ -18,14 +18,20 @@ const getAllRestaurants = async (req, res) => {
 
 const getRestaurant = async (req, res) => {
   try {
-    const result = await db.query(
+    const restaurant = await db.query(
       "SELECT * FROM restaurants WHERE id = $1", // string concatenating is not recommended.
+      [req.params.id]
+    );
+
+    const reviews = await db.query(
+      "SELECT * FROM reviews WHERE restaurant_id = $1", // string concatenating is not recommended.
       [req.params.id]
     );
     res.status(StatusCodes.OK).json({
       status: "success",
       data: {
-        restaurant: result.rows[0],
+        restaurant: restaurant.rows[0],
+        reviews: reviews.rows,
       },
     });
   } catch (error) {
